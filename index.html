@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Blog</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #E2E2E2; 
+        }
+        header { 
+            margin: auto;
+            width: 95vw;
+            background-color: #333; 
+            color: white; 
+            text-align: center; 
+            padding: 1em 0; 
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .filters { 
+            text-align: center; 
+            margin: 1em 0; 
+        }
+        #searchInput { 
+            padding: 0.5em; 
+            width: 300px; 
+            height: 30px;
+            max-width: 80%; 
+            margin-bottom: 1em; 
+            border-radius: 5px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+        #searchInput:hover {
+            background-color: #eed6d6; 
+        } 
+        .categories button {
+            padding: 0.5em 1em; 
+            margin: 0.3em; 
+            background-color: #ddd; 
+            border: none;
+            cursor: pointer; 
+            transition: background-color 0.3s;
+            border-radius: 5px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+        .categories button:hover { 
+            background-color: #bbb; 
+        }
+        .categories button.active { 
+            background-color: #333; 
+            color: white; 
+        }
+        .post-container {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1em; 
+            padding: 1em; 
+            max-width: 1200px; 
+            margin: 0 auto;
+        }
+        .card {
+            background-color: white; 
+            border: 1px solid #ddd; 
+            border-radius: 8px;
+            overflow: hidden; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            transition: transform 0.3s;
+            padding-bottom: 1em;
+        }
+        .card:hover { 
+            transform: translateY(-5px); 
+        }
+        .card img { 
+            width: 100%; 
+            height: 250px; 
+            object-fit: cover; 
+        }
+        .card-content { 
+            padding: 1em; 
+        }
+        .card h2 { 
+            margin: 0 0 0.5em; 
+            font-size: 1.2em; 
+        }
+        .card p { 
+            margin: 0.5em 0; 
+            color: #666; 
+        }
+        .meta { 
+            font-size: 0.9em; 
+            color: #999; 
+            margin-top: 0.5em; 
+        }
+        .likes-comments { display: flex; 
+            justify-content: space-between; 
+            margin-top: 0.5em; 
+            font-size: 0.9em; 
+            color: #555; 
+        }
+        .likes-comments span { 
+            cursor: pointer; 
+        }
+        .likes-comments span:hover { 
+            text-decoration: underline; 
+        }
+        .comment-section { 
+            margin-top: 0.5em; 
+        }
+        .comment-list { 
+            font-size: 0.9em; 
+            color: #333; 
+            margin: 0.5em 0; 
+            padding-left: 15px; 
+        }
+        .comment-input { 
+            width: 80%; 
+            padding: 0.4em; 
+        }
+        .comment-btn { 
+            padding: 0.4em 0.6em; 
+            margin-left: 5px; 
+            cursor: pointer; 
+            background: #333; 
+            color: #fff; 
+            border: none; 
+            border-radius: 4px; 
+        }
+        .comment-btn:hover { 
+            background: #555; 
+        }
+        .pagination { 
+            text-align: center; 
+            margin: 1em 0; 
+        }
+        .pagination button {
+            padding: 0.5em 1em; 
+            margin: 0.2em; 
+            margin-top: -10px;
+            background-color: #333; 
+            color: white;
+            border: none; 
+            cursor: pointer; 
+            transition: background-color 0.3s;
+            border-radius: 5px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+        .pagination button:disabled { 
+            background-color: #bbb; 
+            cursor: not-allowed; 
+        }
+        .pagination button:hover:not(:disabled) { 
+            background-color: #555; 
+        }
+        footer{
+            height: 150px;
+            width: 95vw;
+            background-color: #333; 
+            color: white;  
+            padding: 15px;
+            margin: auto;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+        }
+        #about{
+            float: left;
+            width: 30%;
+            height: 120px;
+            border-right: 1px solid white;
+            padding: 10px;
+        }
+        #about h3{
+            text-align: center;
+            margin-bottom: 0px;
+            margin-top: -5px;
+        }
+        #about p{
+            text-align: justify;
+            margin-bottom: -10px;
+        }
+        #links1{
+            float: left;
+            width: 15%;
+            height: 120px;
+            padding: 10px;
+            padding-left: 30px;
+        }
+         #links1 ul li{
+            padding-bottom: 10px;
+            list-style-type: none;
+         }
+         #links1 ul li a{
+            color: white;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 18px;
+         }
+         #links1 ul li a:hover {
+            margin: 0.2em;
+            background: #555; 
+         }
+         #links2{
+            float: left;
+            width: 15%;
+            height: 120px;
+            padding: 10px;
+            padding-left: 30px;
+            border-right: 1px solid white;
+        }
+         #links2 ul li{
+            padding-bottom: 10px;
+            list-style-type: none;
+         }
+         #links2 ul li a{
+            color: white;
+            text-decoration: none;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 18px;
+         }
+         #links2 ul li a:hover {
+            margin: 0.2em;
+            background: #555; 
+         }
+          #socialMedia{
+            float: left;
+            width: 30%;
+            height: 120px;
+            padding: 10px;
+        }
+        #socialMedia h3{
+            text-align: center;
+            margin-bottom: 15px;
+            margin-top: -10px;
+        }
+        #socialMedia #subBar{
+            margin-left: 60px;
+            height: 50px;
+            width: 120px;
+            background: #666;
+            padding: 10px;
+            border-radius: 10px;
+            color: white; 
+
+        }
+         #socialMedia #subBar #subscribe{
+            background: #666;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: white;
+            border: none; 
+            outline: none; 
+            background-color: transparent; 
+            color: white; 
+            padding: 5px;
+         }
+         #socialMedia #subBar #subscribe::placeholder {
+            color: white;
+            opacity: 1;
+            }
+        #socialMedia #subBar #subBtn{
+            padding: 8px;
+            border-radius: 10px;
+            border: none;
+            font-family: Arial, Helvetica, sans-serif;
+        }  
+        #socialMedia ul li{
+            float: left;
+            padding-bottom: 10px;
+            margin-left: 20px;
+            list-style-type: none;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            background: #666;
+            padding: 10px; 
+         }
+         #socialMedia ul li:hover{
+             background: #eb3939;
+         }
+        #socialMedia p{
+            float: inline-start;
+            padding-left: 90px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) { 
+            .post-container { 
+                grid-template-columns: 1fr; 
+            } 
+        }
+    </style>
+</head>
+<body>
+    <header><h1>Elevvo Blog Page</h1></header>
+    <div class="filters">
+        <input type="text" id="searchInput" placeholder="Search by Title..." oninput="filterPosts()">
+        <div class="categories">
+            <button class="active" onclick="filterCategory('All')">All</button>
+            <button onclick="filterCategory('Tech')">Tech</button>
+            <button onclick="filterCategory('Travel')">Travel</button>
+            <button onclick="filterCategory('Food')">Food</button>
+        </div>
+    </div>
+    <div id="postContainer" class="post-container"></div>
+    <div class="pagination">
+        <button id="prevBtn" onclick="prevPage()">Previous</button>
+        <button id="nextBtn" onclick="nextPage()">Next</button>
+    </div>
+    <footer>
+        <div id="about">
+            <h3>Elevvo Blog Page</h3>
+            <p>
+                If your brand is your name or it was formed based 
+                on a personal brand, your company's story can be one and the same 
+                with your founder story. 
+            </p>
+            <p style="margin-top: 25px;">
+                &copy; Elevvo Blog Page. All rights reserved.
+            </p>
+        </div>
+        <div id="links1">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Career</a></li>
+            </ul>
+        </div>
+        <div id="links2">
+             <ul>
+                <li><a href="#">Support</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Return</a></li>
+                <li><a href="#">FAQ</a></li>
+            </ul>
+        </div>
+        <div id="socialMedia">
+            <h3>Get Updates</h3>
+            <span id="subBar">
+                <input type="email" id="subscribe" placeholder="Enter you email...">
+                <button id="subBtn">Subscribe</button>
+            </span>
+            <ul>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram-icon lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a></li>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter-icon lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a></li>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook-icon lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></li>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube-icon lucide-youtube"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg></a></li>
+                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin-icon lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></a></li>
+            </ul>
+            <p>
+                Privacy Policy &nbsp;&nbsp; Terms of Service
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const posts = [
+            { title: "Exploring New Gadgets", image: "images/1.jpg", desc: "A look into the latest tech innovations.", date: "2023-01-15", time: "10:30 AM", likes: 5, comments: [], category: "Tech" },
+            { title: "Adventures in the Mountains", image: "images/2.jpg", desc: "Hiking through breathtaking landscapes.", date: "2023-02-20", time: "2:45 PM", likes: 8, comments: [], category: "Travel" },
+            { title: "Local hero uses life savings to buy gas for nurses", image: "images/3.jpg", desc: "Easy recipes for everyday meals.", date: "2023-03-10", time: "5:00 PM", likes: 10, comments: [], category: "Food" },
+            { title: "Students raise thousands to help classmates in need", image: "images/4.jpg", desc: "Significant increases in global income per person and renewable energy capacity have been noted.", date: "2023-03-15", time: "10:30 AM", likes: 5, comments: [], category: "Tech" },
+            { title: "Local artist brings joy to city with colorful murals", image: "images/5.jpg", desc: "Breakthroughs in gene therapy have restored sight for individuals with inherited eye disease.", date: "2023-04-20", time: "2:45 PM", likes: 8, comments: [], category: "Travel" },
+            { title: "Delicious Homemade Recipes", image: "images/6.jpg", desc: "Scientists are exploring ways to convert plastic waste into clean fuel and developing robotic assistance for surgeries.", date: "2023-06-10", time: "5:00 PM", likes: 10, comments: [], category: "Food" },
+            
+            // Add more posts with empty comments arrays
+        ];
+
+        let currentPage = 1;
+        let postsPerPage = 3;
+        let currentCategory = 'All';
+        let searchTerm = '';
+
+        function displayPosts() {
+            const filteredPosts = posts.filter(post => {
+                const catMatch = currentCategory === 'All' || post.category === currentCategory;
+                const searchMatch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+                return catMatch && searchMatch;
+            });
+
+            const start = (currentPage - 1) * postsPerPage;
+            const end = start + postsPerPage;
+            const paginatedPosts = filteredPosts.slice(start, end);
+
+            const container = document.getElementById('postContainer');
+            container.innerHTML = '';
+
+            paginatedPosts.forEach((post, index) => {
+                const postIndex = start + index;
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${post.image}" alt="${post.title}">
+                    <div class="card-content">
+                        <h2>${post.title}</h2>
+                        <p>${post.desc}</p>
+                        <p class="meta">Date: ${post.date} | Time: ${post.time}</p>
+                        <div class="likes-comments">
+                            <span onclick="likePost(${postIndex})">❤️ Likes: ${post.likes}</span>
+                            <span>💬 Comments: ${post.comments.length}</span>
+                        </div>
+                        <div class="comment-section">
+                            <input type="text" class="comment-input" id="commentInput${postIndex}" placeholder="Add a comment...">
+                            <button class="comment-btn" onclick="addComment(${postIndex})">Comment</button>
+                            <ul class="comment-list">
+                                ${post.comments.map(c => `<li>${c}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = end >= filteredPosts.length;
+
+            document.querySelectorAll('.categories button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === currentCategory) btn.classList.add('active');
+            });
+        }
+
+        function likePost(index) {
+            posts[index].likes++;
+            displayPosts();
+        }
+
+        function addComment(index) {
+            const input = document.getElementById(`commentInput${index}`);
+            const comment = input.value.trim();
+            if (comment) {
+                posts[index].comments.push(comment);
+                input.value = '';
+                displayPosts();
+            }
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            currentPage = 1;
+            displayPosts();
+        }
+
+        function filterPosts() {
+            searchTerm = document.getElementById('searchInput').value;
+            currentPage = 1;
+            displayPosts();
+        }
+
+        function nextPage() { currentPage++; displayPosts(); }
+        function prevPage() { currentPage--; displayPosts(); }
+
+        window.onload = displayPosts;
+    </script>
+</body>
+</html>
